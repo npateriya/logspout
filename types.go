@@ -40,9 +40,10 @@ func (s *Source) All() bool {
 }
 
 type Target struct {
-	Type      string `json:"type"`
-	Addr      string `json:"addr"`
-	AppendTag string `json:"append_tag,omitempty"`
+	Type       string `json:"type"`
+	Addr       string `json:"addr"`
+	AppendTag  string `json:"append_tag,omitempty"`
+	KafkaTopic string `json:"kafka_topic,omitempty"`
 }
 
 func marshal(obj interface{}) []byte {

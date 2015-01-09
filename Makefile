@@ -10,8 +10,8 @@ stage/logspout: build/logspout
 	cp build/logspout stage/logspout
 
 release:
-	docker tag logspout progrium/logspout
-	docker push progrium/logspout
+	docker tag -f logspout npateriya/logspout
+	docker push npateriya/logspout
 
 .PHONY: clean
 clean:

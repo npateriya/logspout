@@ -12,10 +12,12 @@ import (
 	"os"
 	"strconv"
 	"strings"
+        "time"
 
 	"code.google.com/p/go.net/websocket"
 	"github.com/fsouza/go-dockerclient"
 	"github.com/go-martini/martini"
+        "github.com/Shopify/sarama"
 )
 
 var debugMode bool
@@ -83,6 +85,28 @@ func udpStreamer(target Target, types []string, logstream chan *Log) {
 		}
 		encoder.Encode(logline)
 	}
+}
+
+func kafkaStreamer(target Target, types []string, logstream chan *Log) {
+	typestr := "," + strings.Join(types, ",") + ","
+        clientConfig := sarama.NewClientConfig()
+        clientConfig.WaitForElection = (10 * time.Second)
+        client, err := sarama.NewClient("client_id", []string{target.Addr}, clientConfig)
+        assert(err, "Connection to kafka failed")
+
+        producerConfig := sarama.NewProducerConfig()
+        producerConfig.RequiredAcks = -1
+        producer, err := sarama.NewProducer(client, producerConfig)
+        assert(err, "kafka producer creation failed")
+        defer producer.Close()
+
+        for logline := range logstream {
+                if typestr != ",," && !strings.Contains(typestr, logline.Type) {
+	            continue
+	        }
+                message := &sarama.MessageToSend{Topic: target.KafkaTopic , Key: nil, Value: sarama.StringEncoder(logline.Data)}
+                producer.Input() <- message
+        }
 }
 
 func websocketStreamer(w http.ResponseWriter, req *http.Request, logstream chan *Log, closer chan bool) {
