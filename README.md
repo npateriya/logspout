@@ -68,7 +68,7 @@ Since `/logs` and `/logs/filter:<string>` endpoints can return logs from multipl
 
 ### Routes Resource
 
-Routes let you configure logspout to hand-off logs to another system. Right now the only supported target type is via UDP `syslog`, but hey that's pretty much everything.
+Routes let you configure logspout to hand-off logs to another system. Right now the only supported target type is via UDP `syslog`, but hey that's pretty much everything. Also added kafka streamer to support logging to kafka topics.
 
 #### Creating a route
 
@@ -95,6 +95,18 @@ To route all logs of all types on all containers, don't specify a `source`.
 The `append_tag` field of `target` is optional and specific to `syslog`. It lets you append to the tag of syslog packets for this route. By default the tag is `<container-name>`, so an `append_tag` value of `.app` would make the tag `<container-name>.app`.
 
 And yes, you can just specify an IP and port for `addr`, but you can also specify a name that resolves via DNS to one or more SRV records. That means this works great with [Consul](http://www.consul.io/) for service discovery.
+
+***Kafka create route JSON object***
+
+        {
+                "target": {
+                        "type": "kakfa",
+                        "addr": "<kafka_broker_host>:<port>"
+                        "kafka_topic" : "logs"
+                }
+        }
+
+Source same as syslog. Target takes kafka broker host:port(9092) address as addr. Kafka specific field kafka_topic with name of topic to send logs to, topic should preexist in kafka. 
 
 #### Listing routes
 
