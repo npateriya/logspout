@@ -45,7 +45,7 @@ func NewAttachManager(client *docker.Client) *AttachManager {
 func (m *AttachManager) attach(id string) {
 	container, err := m.client.InspectContainer(id)
 	assert(err, "attacher")
-	name := container.Name[1:]
+	name := container.Name[1:] + ":"+ container.Image[:12] + ":"+ container.Config.Hostname +":"
 	success := make(chan struct{})
 	failure := make(chan error)
 	outrd, outwr := io.Pipe()

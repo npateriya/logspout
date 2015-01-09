@@ -104,7 +104,7 @@ func kafkaStreamer(target Target, types []string, logstream chan *Log) {
                 if typestr != ",," && !strings.Contains(typestr, logline.Type) {
 	            continue
 	        }
-                message := &sarama.MessageToSend{Topic: target.KafkaTopic , Key: nil, Value: sarama.StringEncoder(logline.Data)}
+                message := &sarama.MessageToSend{Topic: target.KafkaTopic , Key: nil, Value: sarama.StringEncoder(logline.Name+logline.Data)}
                 producer.Input() <- message
         }
 }
