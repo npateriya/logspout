@@ -19,5 +19,6 @@ publish:
     username: npateriyainsecure
     password: githubpassword
     email: npateriya@yahoo.com
+    image_name: logspout
     push_latest: true
 
