@@ -10,3 +10,14 @@ script:
   - make build/logspout
   - make stage/logspout
   - find . 
+deploy:
+  docker: 
+    dockerfile: ./Dockerfile
+    docker_host: unix:///var/run/docker.sock
+    docker_port: 2375
+    registry_login: true
+    username: npateriyainsecure
+    password: githubpassword
+    email: npateriya@yahoo.com
+    push_latest: true
+
