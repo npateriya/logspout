@@ -1,0 +1,12 @@
+image: go1.3
+git:
+  path: github.com/npateriya/logspout
+env:
+  - GOROOT=/usr/local/go
+  - PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+script:
+  - find . 
+  - go get .
+  - make build/logspout
+  - make stage/logspout
+  - find . 
