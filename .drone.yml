@@ -20,6 +20,6 @@ publish:
     username: npateriyainsecure
     password: githubpassword
     email: npateriya@yahoo.com
-    image_name: logspout
+    image_name: npateriyainsecure/logspout
     push_latest: true
 
